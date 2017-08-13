@@ -6,21 +6,18 @@
 #include <vector>
 #include <string.h>
 #include <fcntl.h>
-
-//declaration of node struct. used to hold the contents of each line in the input file
-struct Node{
-	int id, x, y;
-};
-
+#include <algorithm>
+#include "nodeStruct.h"
+#include "nearestNeighbor.h"
 
 //this function prints out the contents of a vector. use to test that file was read in correctly
-void printNodes(std::vector<struct Node> &a)
+/*void printNodes(std::vector<struct Node> &a)
 {
 	for (int x = 0; x < a.size(); x++)
 	{
 		std::cout << "ID: " << a[x].id << " x: " << a[x].x << " y: " << a[x].y << std::endl;
 	}
-}
+}*/
 
 int main(int argc, char* argv[])
 {
@@ -92,6 +89,12 @@ int main(int argc, char* argv[])
 	/********************************************/
 	/*	 	    Call algorithm on vector 		*/
 	/********************************************/
+	int* resultCities = new int[input.size()];
+	int total = 0;
+
+	tspNN(input, input.size(), resultCities, total);
+
+	delete[] resultCities;
 
 	return 0;
 }
