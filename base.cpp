@@ -38,6 +38,46 @@ void writeResults(int resultSet[], int n, int total, std::string file)
 	fclose(myfile);
 }
 
+int computeDistance(struct Node x, struct Node y)
+{
+	return round(sqrt( (pow((x.x-y.x), 2)) + (pow((x.y-y.y), 2)) ));
+}
+
+void createDistanceMatrix(std::vector<struct Node> &x, int** matrix)
+{
+	for (int y = 0; y < x.size(); y++)
+	{
+		for (int z = 0; z < x.size(); z++)
+		{
+			matrix[y][z] = computeDistance(x[y], x[z]);
+		}
+	}
+}
+
+void copyArray(int a[], int b[], int n)
+{
+	for (int x = 0; x < n; x++)
+	{
+		b[x] = a[x];
+	}
+}
+
+void printArray(int a[], int n)
+{
+	for (int x = 0; x < n; x++)
+	{
+		std::cout << a[x] << std::endl;
+	}
+}
+
+void zeroArray(int a[], int n)
+{
+	for (int x = 0; x < n; x++)
+	{
+		a[x] = 0;
+	}
+}
+
 int main(int argc, char* argv[])
 {
 	/********************************************/
@@ -109,16 +149,47 @@ int main(int argc, char* argv[])
 		//token = NULL;
 		len = 0;
 	}
+	fclose(file);
+
+	/********************************************/
+	/*	 	    Create distance matrix			*/
+	/********************************************/
+
+	/***** Declare a 2D array to hold distances ******/
+	int** matrix;
+	matrix = new int *[input.size()];
+	for (int p = 0; p < input.size(); p++)
+	{
+		matrix[p] = new int[input.size()];
+	}
+
+	createDistanceMatrix(input, matrix); //create the distance matrix	
 
 	/********************************************/
 	/*	 	    Call algorithm on vector 		*/
 	/********************************************/
 	int* resultCities = new int[input.size()];
+	int* finalCities = new int[input.size()];
 	int total = 0;
+	int finalTotal = 9999999;
 
-	tspNN(input, input.size(), resultCities, &total);
+	for (int m = 0; m < input.size(); m++)
+	{
+		//call the algorithm
+		tspNN(input, input.size(), resultCities, &total, matrix);
 
-	writeResults(resultCities, input.size(), total, outfilename);
+		if (total < finalTotal)
+		{
+			finalTotal = total;
+			//copy result array to final array
+			copyArray(resultCities, finalCities, input.size());
+		}
+		//swap out the starting element by moving it to the back
+		std::rotate(input.begin(), input.begin() + 1, input.end()); //move the first element to the end
+		zeroArray(resultCities, input.size());
+	}
+
+	writeResults(finalCities, input.size(), finalTotal, outfilename);
 
 	return 0;
 }
