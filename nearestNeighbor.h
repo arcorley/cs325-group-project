@@ -9,7 +9,7 @@
 #include <algorithm>
 #include "nodeStruct.h"
 
-void tspNN(std::vector<struct Node> &a, int n, int resultSet[], int *total);
+void tspNN(std::vector<struct Node> &a, int n, int resultSet[], int *total, int** matrix);
 
 static bool compare( const struct Node &i, const struct Node &j);
 
