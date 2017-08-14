@@ -5,19 +5,37 @@
 #include <fstream>
 #include <vector>
 #include <string.h>
+#include <string>
 #include <fcntl.h>
 #include <algorithm>
 #include "nodeStruct.h"
 #include "nearestNeighbor.h"
 
-//this function prints out the contents of a vector. use to test that file was read in correctly
-/*void printNodes(std::vector<struct Node> &a)
+void printResultSet(int resultSet[], int n)
 {
-	for (int x = 0; x < a.size(); x++)
+	std::cout << "Result Set: " << std::endl;
+	for (int x = 0; x < n; x++)
 	{
-		std::cout << "ID: " << a[x].id << " x: " << a[x].x << " y: " << a[x].y << std::endl;
+		std::cout << "City " << x << ": " << resultSet[x] << std::endl;
 	}
-}*/
+}
+
+void writeResults(int resultSet[], int n, int total, std::string file)
+{
+	int x, y;
+
+	FILE* myfile;
+	myfile = fopen(file.c_str(), "w");
+
+	fprintf(myfile, "%d\n", total);
+
+	for (x = 0; x < n; x++)
+	{
+		fprintf(myfile, "%d\n", resultSet[x]);
+	}
+
+	fclose(myfile);
+}
 
 int main(int argc, char* argv[])
 {
@@ -25,14 +43,20 @@ int main(int argc, char* argv[])
 	/*				Get filename				*/
 	/********************************************/
 	std::string filename;
+	std::string outfilename;
+	std::string ext = ".tour";
 	if (argc < 2) //this section handles the case where the user didn't enter any arguments
 	{
 		std::cout << "Please enter a filename to read from:" << std::endl;
 		std::getline(std::cin, filename);
+		outfilename.append(filename);
+		outfilename.append(ext);
 	}
 	else if (argc == 2) //this section handles the case where the user enters a filename argument
 	{
 		filename = argv[1];
+		outfilename.append(filename);
+		outfilename.append(ext);
 	}
 	else 
 	{
@@ -92,7 +116,13 @@ int main(int argc, char* argv[])
 	int* resultCities = new int[input.size()];
 	int total = 0;
 
-	tspNN(input, input.size(), resultCities, total);
+	tspNN(input, input.size(), resultCities, &total);
+
+	writeResults(resultCities, input.size(), total, outfilename);
+
+	//printResultSet(resultCities, input.size());
+
+	//std::cout << std::endl << "Total Distance: " << total << std::endl;
 
 	delete[] resultCities;
 
