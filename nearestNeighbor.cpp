@@ -147,6 +147,4 @@ void tspNN(std::vector<struct Node> &a, int n, int resultSet[], int *total)
 	}
 
 	*total = totalDistance; //write the total distance
-
-	delete[] matrix;
 }
