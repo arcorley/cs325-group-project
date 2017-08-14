@@ -15,22 +15,6 @@ static bool compare( const struct Node &i, const struct Node &j)
 	return i.x < j.x;
 }
 
-int computeDistance(struct Node x, struct Node y)
-{
-	return round(sqrt( (pow((x.x-y.x), 2)) + (pow((x.y-y.y), 2)) ));
-}
-
-void createDistanceMatrix(std::vector<struct Node> &x, int** matrix)
-{
-	for (int y = 0; y < x.size(); y++)
-	{
-		for (int z = 0; z < x.size(); z++)
-		{
-			matrix[y][z] = computeDistance(x[y], x[z]);
-		}
-	}
-}
-
 void printMatrix(int** matrix, int n)
 {
 	int x, y;
@@ -80,7 +64,7 @@ void printNodes(std::vector<struct Node> &a)
 	}
 }
 
-void tspNN(std::vector<struct Node> &a, int n, int resultSet[], int *total)
+void tspNN(std::vector<struct Node> &a, int n, int resultSet[], int* total, int** matrix)
 {
 	std::vector<struct Node> g;
 
@@ -89,17 +73,8 @@ void tspNN(std::vector<struct Node> &a, int n, int resultSet[], int *total)
 		g.push_back(a[x]);
 	}
 
-	/***** Declare a 2D array to hold distances ******/
-	int** matrix;
-	matrix = new int *[g.size()];
-	for (int p = 0; p < g.size(); p++)
-	{
-		matrix[p] = new int[g.size()];
-	}
-
-	createDistanceMatrix(g, matrix); //create the distance matrix
-
 	std::sort(g.begin(), g.end(), compare); //sort g in ascending order of x
+
 
 	resultSet[0] = g[0].id; //set the starting city to the city with the smallest x and y
 
