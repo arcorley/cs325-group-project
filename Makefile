@@ -4,7 +4,7 @@ CXXFLAGS += -c #-Wall
 CXXFLAGS += -g #debugging info
 CXXFLAGS += -pedantic-errors
 
-objects = base.o #nodeStruct.o
+objects = base.o nearestNeighbor.o
 
 all: base
 
@@ -14,10 +14,7 @@ base: $(objects)
 base.o: base.cpp nodeStruct.h nearestNeighbor.h
 	$(CXX) $(CXXFLAGS) base.cpp
 
-#nodeStruct.o: nodeStruct.h 
-#	$(CXX) $(CXXFLAGS) nodeStruct.cpp
-
-nearestNeighbor.o: nearestNeighbor.h nodeStruct.h
+nearestNeighbor.o: nearestNeighbor.cpp nodeStruct.h
 	$(CXX) $(CXXFLAGS) nearestNeighbor.cpp
 clean: 
 	rm -rf $(objects) base 
