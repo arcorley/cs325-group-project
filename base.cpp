@@ -8,6 +8,7 @@
 #include <string>
 #include <fcntl.h>
 #include <algorithm>
+#include <sstream>
 #include "nodeStruct.h"
 #include "nearestNeighbor.h"
 
@@ -74,6 +75,7 @@ int main(int argc, char* argv[])
 	char* line;
 	size_t len = 0;
 	ssize_t read;
+	int x;
 
 	file = fopen(filename.c_str(), "r");
 
@@ -81,32 +83,30 @@ int main(int argc, char* argv[])
 	{
 		Node z = {0};
 		int lineItr = 1;
-		char* token = strtok(line, " "); //get the first number in the line
+		std::istringstream iss(line);
 
-		while (token != NULL)
+		while (iss >> x)
 		{
-			sscanf(token, "%d", &temp); //convert token to an int
 			if (lineItr == 1) //first number on the line is the id
 			{
-				z.id = temp;
+				z.id = x;
 			}
 			else if (lineItr == 2) //second number on the line is the x coord
 			{
-				z.x = temp;
+				z.x = x;
 			}
 			else //else this is the y coord
 			{
-				z.y = temp;
+				z.y = x;
 			}
 
-			token = strtok(NULL, " "); //get the next number in the string
 			lineItr++;
 		}
 
 		input.push_back(z); //push the new node onto the vetor
 		i++;
 		line = NULL;
-		token = NULL;
+		//token = NULL;
 		len = 0;
 	}
 
@@ -119,12 +119,6 @@ int main(int argc, char* argv[])
 	tspNN(input, input.size(), resultCities, &total);
 
 	writeResults(resultCities, input.size(), total, outfilename);
-
-	//printResultSet(resultCities, input.size());
-
-	//std::cout << std::endl << "Total Distance: " << total << std::endl;
-
-	delete[] resultCities;
 
 	return 0;
 }
