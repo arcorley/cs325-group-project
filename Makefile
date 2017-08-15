@@ -6,10 +6,10 @@ CXXFLAGS += -pedantic-errors
 
 objects = base.o nearestNeighbor.o
 
-all: base
+all: main
 
-base: $(objects)
-	$(CXX) $(objects) -o base
+main : $(objects)
+	$(CXX) $(objects) -o main
 
 base.o: base.cpp nodeStruct.h nearestNeighbor.h
 	$(CXX) $(CXXFLAGS) base.cpp
@@ -17,4 +17,4 @@ base.o: base.cpp nodeStruct.h nearestNeighbor.h
 nearestNeighbor.o: nearestNeighbor.cpp nodeStruct.h
 	$(CXX) $(CXXFLAGS) nearestNeighbor.cpp
 clean: 
-	rm -rf $(objects) base 
+	rm -rf $(objects) main
